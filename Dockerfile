@@ -1,6 +1,4 @@
 FROM rocker/tidyverse
 
 # Install other libraries
-RUN install2.r --error \
-     R -e "library(devtools); \
-        install_github('tbates/umx')"
+RUN R -e "devtools::install_github('tbates/umx')"
