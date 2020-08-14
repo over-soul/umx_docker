@@ -36,7 +36,7 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
   wget --no-check-certificate -q https://cran.r-project.org/src/base/R-4/R-4.0.2.tar.gz && \
   tar -zxf R-4.0.2.tar.gz && \
   cd /home/R-4.0.2 && \
-  export MKLROOT="/opt/intel/compilers_and_libraries_2020.2.254/linux" && \
+  export MKLROOT="/opt/intel/compilers_and_libraries_2019.5.281/linux" && \
   export LD_LIBRARY_PATH="${MKLROOT}/tbb/lib/intel64_lin/gcc4.7:${MKLROOT}/compiler/lib/intel64_lin:${MKLROOT}/mkl/lib/intel64_lin" && \
   export LIBRARY_PATH="$LD_LIBRARY_PATH" && \
   export MIC_LD_LIBRARY_PATH="${MKLROOT}/tbb/lib/intel64_lin_mic:${MKLROOT}/compiler/lib/intel64_lin_mic:${MKLROOT}/mkl/lib/intel64_lin_mic" && \
@@ -59,7 +59,7 @@ RUN cd /home && \
   cd /home && rm -rf nlopt-* && \
 
   cd /home && \
-  echo "devtools,Rcpp,RcppEigen,R.utils,Matrix,zip,data.table,filematrix,dplyr,reshape2,ggplot2,MASS,car,Hmisc,furrr" | tr ',' '\n' > /home/pkgs.txt && \
+  echo "devtools,Rcpp,RcppEigen,R.utils,Matrix,zip,data.table,filematrix,dplyr,reshape2,ggplot2,MASS,car,Hmisc,furrr,benchmarkme" | tr ',' '\n' > /home/pkgs.txt && \
   echo "pkgs <- read.csv('/home/pkgs.txt', header=FALSE, as.is=TRUE)[,1];" > instpkgs.R && \
   echo "print(pkgs);" >> instpkgs.R && \
   echo "install.packages(pkgs, repos='https://cloud.r-project.org/', clean=TRUE, INSTALL_opts='--no-docs --no-demo --byte-compile');" >> instpkgs.R && \
