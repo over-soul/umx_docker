@@ -29,7 +29,7 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
   sed -e "s/false/true/g" /etc/default/sysstat > /etc/default/sysstat.bak && \
   mv /etc/default/sysstat.bak /etc/default/sysstat && \
   /etc/init.d/sysstat start && \
-  cd /home && wget -q ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.43.tar.gz && \
+  cd /home && wget -q https://ftp.pcre.org/pub/pcre/pcre-8.43.tar.gz && \
   tar -zxf pcre-8.43.tar.gz && cd pcre-8.43 && \
   ./configure --enable-pcre16 --enable-pcre32 --enable-jit --enable-utf --enable-pcregrep-libz --enable-pcregrep-libbz2 --enable-pcretest-libreadline && \
   make && make install && cd /home && rm -rf /home/pcre* && \
