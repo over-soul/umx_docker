@@ -3,9 +3,9 @@ FROM ubuntu:18.04
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ gfortran wget cpio && \
 
   cd /tmp && \
-  wget -q http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_2019.3.199.tgz && \
-  tar -xzf l_mkl_2019.3.199.tgz && \
-  cd l_mkl_2019.3.199 && \
+  wget -q http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_2019.5.281.tgz && \
+  tar -xzf l_mkl_2019.5.281.tgz && \
+  cd l_mkl_2019.5.281 && \
   sed -i 's/ACCEPT_EULA=decline/ACCEPT_EULA=accept/g' silent.cfg && \
   sed -i 's/ARCH_SELECTED=ALL/ARCH_SELECTED=INTEL64/g' silent.cfg && \
   sed -i 's/COMPONENTS=DEFAULTS/COMPONENTS=;intel-comp-l-all-vars__noarch;intel-comp-nomcu-vars__noarch;intel-openmp__x86_64;intel-tbb-libs__x86_64;intel-mkl-common__noarch;intel-mkl-installer-license__noarch;intel-mkl-core__x86_64;intel-mkl-core-rt__x86_64;intel-mkl-doc__noarch;intel-mkl-doc-ps__noarch;intel-mkl-gnu__x86_64;intel-mkl-gnu-rt__x86_64;intel-mkl-common-ps__noarch;intel-mkl-core-ps__x86_64;intel-mkl-common-c__noarch;intel-mkl-core-c__x86_64;intel-mkl-common-c-ps__noarch;intel-mkl-tbb__x86_64;intel-mkl-tbb-rt__x86_64;intel-mkl-gnu-c__x86_64;intel-mkl-common-f__noarch;intel-mkl-core-f__x86_64;intel-mkl-gnu-f-rt__x86_64;intel-mkl-gnu-f__x86_64;intel-mkl-f95-common__noarch;intel-mkl-f__x86_64;intel-mkl-psxe__noarch;intel-psxe-common__noarch;intel-psxe-common-doc__noarch;intel-compxe-pset/g' silent.cfg && \
@@ -15,7 +15,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ 
   echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/intel.conf && \
   ldconfig && \
   echo "source /opt/intel/mkl/bin/mklvars.sh intel64" >> /etc/bash.bashrc
-  
   
 # Build R dependencies
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
@@ -45,7 +44,7 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
   export CPATH="${MKLROOT}/mkl/include" && \
   export NLSPATH="${MKLROOT}/mkl/lib/intel64_lin/locale/%l_%t/%N" && \
   export MKL="-L${MKLROOT}/mkl/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -ldl" && \
-  ./configure CFLAGS="-g -O3" CPPFLAGS="-g -O3" FFLAGS="-g -O3" FCFLAGS="-g -O3 -m64 -I${MKLROOT}/mkl/include" --prefix=/opt/R --enable-R-shlib --enable-shared --enable-R-profiling --enable-memory-profiling --with-blas="$MKL" --with-lapack && \
+  ./configure CFLAGS="-g -O3" CPPFLAGS="-g -O3" FFLAGS="-g -O3" FCFLAGS="-g -O3 -m64 -I${MKLROOT}/mkl/include" --prefix=/opt/R --enable-R-shlib --enable-shared --enable-R-profiling --enable-memory-profiling --with-blas="$MKL" --with-lapack --with-pcre1 && \
   make && make install && cd /home && rm -Rf /home/R-* && \
   ln -s /opt/R/bin/R /usr/bin/R && \
   ln -s /opt/R/bin/Rscript /usr/bin/Rscript
@@ -53,14 +52,14 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
 RUN cd /home && \
 
   cd /home && \
-  wget -q https://github.com/stevengj/nlopt/archive/v2.5.0.tar.gz && ls && \
-  tar -zxf v2.5.0.tar.gz && ls && \
-  cd nlopt-2.5.0 && \
+  wget -q https://github.com/stevengj/nlopt/archive/v2.6.2.tar.gz && ls && \
+  tar -zxf v2.6.2.tar.gz && ls && \
+  cd nlopt-2.6.2 && \
   cmake -DCMAKE_CXX_FLAGS="-g -O3 -fPIC" && make && make install && \
   cd /home && rm -rf nlopt-* && \
 
   cd /home && \
-  echo "devtools,grImport,Rcpp,RcppEigen,R.utils,Matrix,zip,data.table,filematrix,plyr,reshape2,ggplot2,SuppDists,MASS,survival,car,mice,Hmisc" | tr ',' '\n' > /home/pkgs.txt && \
+  echo "devtools,Rcpp,RcppEigen,R.utils,Matrix,zip,data.table,filematrix,dplyr,reshape2,ggplot2,MASS,car,Hmisc,furrr" | tr ',' '\n' > /home/pkgs.txt && \
   echo "pkgs <- read.csv('/home/pkgs.txt', header=FALSE, as.is=TRUE)[,1];" > instpkgs.R && \
   echo "print(pkgs);" >> instpkgs.R && \
   echo "install.packages(pkgs, repos='https://cloud.r-project.org/', clean=TRUE, INSTALL_opts='--no-docs --no-demo --byte-compile');" >> instpkgs.R && \
@@ -76,6 +75,6 @@ RUN cd /home && \
   echo "} else {" >> instpkgs.R && \
   echo "    cat('\n\n\n\n\n\nAll intended packages were installed!\n');" >> instpkgs.R && \
   echo "}" >> instpkgs.R && \
-  echo "devtools::install_github('tbates/umx');" && \
+  echo "devtools::install_github('tbates/umx');" >> instpkgs.R && \
   Rscript --vanilla /home/instpkgs.R && \
 rm -Rf /home/*
