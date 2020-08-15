@@ -1,5 +1,7 @@
 FROM rocker/rstudio
 
+RUN apt-get update && apt-get install -y gnupg2
+
 RUN cd /tmp && \
 wget -q https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB && \
 apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB && \
