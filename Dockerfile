@@ -11,10 +11,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install gcc g++ 
   sed -i 's/COMPONENTS=DEFAULTS/COMPONENTS=;intel-comp-l-all-vars__noarch;intel-comp-nomcu-vars__noarch;intel-openmp__x86_64;intel-tbb-libs__x86_64;intel-mkl-common__noarch;intel-mkl-installer-license__noarch;intel-mkl-core__x86_64;intel-mkl-core-rt__x86_64;intel-mkl-doc__noarch;intel-mkl-doc-ps__noarch;intel-mkl-gnu__x86_64;intel-mkl-gnu-rt__x86_64;intel-mkl-common-ps__noarch;intel-mkl-core-ps__x86_64;intel-mkl-common-c__noarch;intel-mkl-core-c__x86_64;intel-mkl-common-c-ps__noarch;intel-mkl-tbb__x86_64;intel-mkl-tbb-rt__x86_64;intel-mkl-gnu-c__x86_64;intel-mkl-common-f__noarch;intel-mkl-core-f__x86_64;intel-mkl-gnu-f-rt__x86_64;intel-mkl-gnu-f__x86_64;intel-mkl-f95-common__noarch;intel-mkl-f__x86_64;intel-mkl-psxe__noarch;intel-psxe-common__noarch;intel-psxe-common-doc__noarch;intel-compxe-pset/g' silent.cfg && \
   ./install.sh -s silent.cfg && \
   cd .. && rm -rf * && \
-  rm -rf /opt/intel/.*.log /opt/intel/compilers_and_libraries_2019.3.199/licensing && \
+  rm -rf /opt/intel/.*.log /opt/intel/compilers_and_libraries_2019.5.281/licensing && \
   echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/intel.conf && \
   ldconfig && \
-  echo "source /opt/intel/mkl/bin/mklvars.sh intel64" >> /etc/bash.bashrc
+  echo "source /opt/intel/mkl/bin/mklvars.sh intel64" >> /etc/bash.bashrc && \
+  echo MKL_INTERFACE_LAYER=GNU,LP64 >> /etc/environment && \
+  echo MKL_THREADING_LAYER=GNU >> /etc/environment
   
 # Build R dependencies
 RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
@@ -23,8 +25,6 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
   DEBIAN_FRONTEND=noninteractive apt-get -y build-dep r-base-dev && \
   DEBIAN_FRONTEND=noninteractive apt-get -y install libcurl4-openssl-dev sysstat libssl-dev  cmake netcdf-bin libnetcdf-dev libxml2-dev ed libssh2-1-dev zip unzip libicu-dev libmariadb-client-lgpl-dev && \
   DEBIAN_FRONTEND=noninteractive apt-get -y remove libblas3 libblas-dev && \
-# Instead of relying on Ubuntu Trusty's libpcre 8.31 (which is deemed obsolete by R),
-# Try to install 8.43 manually
   sed -e "s/false/true/g" /etc/default/sysstat > /etc/default/sysstat.bak && \
   mv /etc/default/sysstat.bak /etc/default/sysstat && \
   /etc/init.d/sysstat start && \
@@ -43,7 +43,7 @@ RUN sed -Ei 's/^# deb-src /deb-src /' /etc/apt/sources.list && \
   export MIC_LIBRARY_PATH="$MIC_LD_LIBRARY_PATH" && \
   export CPATH="${MKLROOT}/mkl/include" && \
   export NLSPATH="${MKLROOT}/mkl/lib/intel64_lin/locale/%l_%t/%N" && \
-  export MKL="-L${MKLROOT}/mkl/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -ldl" && \
+  export MKL="-L${MKLROOT}/mkl/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -ldl -fopenmp" && \
   ./configure CFLAGS="-g -O3" CPPFLAGS="-g -O3" FFLAGS="-g -O3" FCFLAGS="-g -O3 -m64 -I${MKLROOT}/mkl/include" --prefix=/opt/R --enable-R-shlib --enable-shared --enable-R-profiling --enable-memory-profiling --with-blas="$MKL" --with-lapack --with-pcre1 && \
   make && make install && cd /home && rm -Rf /home/R-* && \
   ln -s /opt/R/bin/R /usr/bin/R && \
