@@ -12,7 +12,8 @@ update-alternatives --install /usr/lib/x86_64-linux-gnu/libopenblas.so libopenbl
 update-alternatives --install /usr/lib/x86_64-linux-gnu/libopenblas.so.0 libopenblas.so.0-x86_64-linux-gnu  /opt/intel/mkl/lib/intel64/libmkl_rt.so 150 && \
 echo "/opt/intel/lib/intel64"     >  /etc/ld.so.conf.d/mkl.conf && \
 echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/mkl.conf && \
-ldconfig
+ldconfig && \
+echo "MKL_THREADING_LAYER=GNU" >> /etc/environment
 
 # Install other libraries
 RUN R -e "install.packages(c('devtools', 'furrr', 'benchmarkme'))"
