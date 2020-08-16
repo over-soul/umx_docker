@@ -1,6 +1,6 @@
 FROM rocker/rstudio
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2 nano
 
 RUN cd /tmp && \
 wget -q https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB && \
@@ -13,6 +13,7 @@ update-alternatives --install /usr/lib/x86_64-linux-gnu/libopenblas.so.0 libopen
 echo "/opt/intel/lib/intel64"     >  /etc/ld.so.conf.d/mkl.conf && \
 echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/mkl.conf && \
 ldconfig && \
+echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/environment && \
 echo "MKL_THREADING_LAYER=GNU" >> /etc/environment
 
 # Install other libraries
