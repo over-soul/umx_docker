@@ -14,7 +14,9 @@ echo "/opt/intel/lib/intel64"     >  /etc/ld.so.conf.d/mkl.conf && \
 echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/mkl.conf && \
 ldconfig && \
 echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/environment && \
-echo "MKL_THREADING_LAYER=GNU" >> /etc/environment
+echo "MKL_THREADING_LAYER=GNU" >> /etc/environment && \
+echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/R/Renviron && \
+echo "MKL_THREADING_LAYER=GNU" >> /etc/R/Renviron
 
 # Install other libraries
 RUN R -e "install.packages(c('devtools', 'furrr', 'benchmarkme'))"
