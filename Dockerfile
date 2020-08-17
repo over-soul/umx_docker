@@ -18,7 +18,7 @@ ldconfig
 RUN echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/environment && \
 echo "MKL_THREADING_LAYER=GNU" >> /etc/environment && \
 echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /usr/local/lib/R/etc/Renviron && \
-echo "MKL_THREADING_LAYER=GNU" >> /usr/local/lib/R/etc/Renviron && \
+echo "MKL_THREADING_LAYER=GNU" >> /usr/local/lib/R/etc/Renviron
 # echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /home/rstudio/.Renviron && \
 # echo "MKL_THREADING_LAYER=GNU" >> /home/rstudio/.Renviron
 

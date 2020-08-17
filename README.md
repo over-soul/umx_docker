@@ -1,4 +1,4 @@
-# umx package
+# umx Docker
 This is a Docker container for R 4.0.2 with RStudio, [Intel Math Kernel Library (MKL)](https://software.intel.com/en-us/mkl?cid=sem43700010399172562&intel_term=%2Bintel%20%2Bmkl&gclid=Cj0KCQjwzcbWBRDmARIsAM6uChXqzD4ACUJqCiu3zRJKA9rkC31XOhm9lIkEYiwBITMR_8hJbIAExF8aAn_LEALw_wcB&gclsrc=aw.ds), and `umx` package pre-installed. 
 
 `umx` is a package designed to make [structural equation modeling](https://en.wikipedia.org/wiki/Structural_equation_modeling) easier, from building, to modifying and reporting.
@@ -14,7 +14,7 @@ Map a host folder to the container so the container can access files on host and
 
 `sudo docker run -d --rm -v $(pwd):/home/rstudio/data -e USERID=$UID -p 8787:8787 -e PASSWORD=<password> diffpsych/umx`
 
-You can then open a web browser pointing to your docker host on port 8787. Username to login to RStudio is `rstudio` and the password is whatever you set when you ran container.
+You can then open a web browser pointing to your docker host on port 8787. Username to login to RStudio is `rstudio` and the password is whatever you set when you ran the container.
 
 [More details about sharing volumes and permissions on rocker wiki](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine#linux)
 
@@ -39,6 +39,9 @@ You can then open a web browser pointing to your docker host on port 8787. Usern
 ```sudo docker kill <container ID>```
 
 ## R Code
+
+### Get or print the version of umx, along with detail from OpenMx and general system info
+`umx::umxVersion()`
 
 ### Shows how many cores you are using, and runs a test script so user can check CPU usage
 `umx::umx_check_parallel()`
