@@ -18,6 +18,20 @@ You can then open a web browser pointing to your docker host on port 8787. Usern
 
 [More details about sharing volumes and permissions on rocker wiki](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine#linux)
 
+### `docker run` and common [flags](https://docs.docker.com/reference/run/):
+
+`-i`      Interactive (usually used with -t)
+
+`-t`      TTY: Allocate a pseudo-TTY (basically a terminal interface for a CLI)
+
+`-p`      Publish Ports: -p <host port>:<container port>
+
+`-d`      Detached mode: run the container in the backgroup (opposite of -i -t)
+
+`-v`      Mount a volume from inside your container (that has been specified with the VOLUME instruction in the Dockerfile)
+
+`--rm`    Remove your container from the host when it stops running
+
 ### See list of all running containers
 ```sudo docker ps```
 

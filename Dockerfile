@@ -2,6 +2,7 @@ FROM rocker/rstudio
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2 nano
 
+# Install Intel MKL
 RUN cd /tmp && \
 wget -q https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB && \
 apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB && \
@@ -18,12 +19,9 @@ RUN echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/environment && \
 echo "MKL_THREADING_LAYER=GNU" >> /etc/environment && \
 echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /usr/local/lib/R/etc/Renviron && \
 echo "MKL_THREADING_LAYER=GNU" >> /usr/local/lib/R/etc/Renviron && \
-echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /home/rstudio/.Renviron && \
-echo "MKL_THREADING_LAYER=GNU" >> /home/rstudio/.Renviron
+# echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /home/rstudio/.Renviron && \
+# echo "MKL_THREADING_LAYER=GNU" >> /home/rstudio/.Renviron
 
-ENV MKL_INTERFACE_LAYER=GNU,LP64
-ENV MKL_THREADING_LAYER=GNU
-
-# Install other libraries
+# Install packages
 RUN R -e "install.packages(c('devtools', 'furrr', 'benchmarkme'))"
 RUN R -e "devtools::install_github('tbates/umx')"
