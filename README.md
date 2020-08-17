@@ -5,8 +5,7 @@ This is a Docker container for R 4.0.2 with RStudio, [Intel Math Kernel Library 
 `umx` includes high-level functions for complex models such as multi-group twin models, as well as graphical model output.
 
 [Find out more about umx](https://github.com/tbates/umx).
-
-## Docker Commands
+## Docker commands
 ### Pull umx image from dockerhub
 ```sudo docker pull diffpsych/umx```
 
@@ -15,9 +14,9 @@ Map a host folder to the container so the container can access files on host and
 
 `sudo docker run -d --rm -v $(pwd):/home/rstudio/data -e USERID=$UID -p 8787:8787 -e PASSWORD=<password> diffpsych/umx`
 
-Username to login to RStudio is `rstudio` and the password is whatever you set when you ran container.
+You can then open a web browser pointing to your docker host on port 8787. Username to login to RStudio is `rstudio` and the password is whatever you set when you ran container.
 
-[More details about permissions on rocker wiki](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine#linux)
+[More details about sharing volumes and permissions on rocker wiki](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine#linux)
 
 ### See list of all running containers
 ```sudo docker ps```
