@@ -1,6 +1,7 @@
 FROM rocker/rstudio
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2 nano
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive -y apt-get upgrade
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2 nano
 
 # Install Intel MKL
 RUN cd /tmp && \
@@ -24,3 +25,4 @@ echo "auth-timeout-minutes=0" >> /etc/rstudio/rserver.conf
 # Install packages
 RUN R -e "install.packages(c('devtools', 'furrr', 'benchmarkme'))"
 RUN R -e "devtools::install_github('tbates/umx')"
+RUN R -e "update.packages(ask = FALSE)"
