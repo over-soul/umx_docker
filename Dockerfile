@@ -1,7 +1,8 @@
 FROM rocker/rstudio
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive -y apt-get upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y gnupg2 nano
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get -y upgrade
+RUN apt-get install -y gnupg2 nano
 
 # Install Intel MKL
 RUN cd /tmp && \
