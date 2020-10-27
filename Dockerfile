@@ -2,7 +2,7 @@ FROM rocker/rstudio
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y gnupg2 nano
+RUN apt-get install -y gnupg2 nano libxml2 libxml2
 
 # Install Intel MKL
 RUN cd /tmp && \
@@ -25,5 +25,5 @@ echo "auth-timeout-minutes=0" >> /etc/rstudio/rserver.conf
 
 # Install packages
 RUN R -e "install.packages(c('devtools', 'furrr', 'benchmarkme'))"
-RUN R -e "devtools::install_github('tbates/umx')"
 RUN R -e "update.packages(ask = FALSE)"
+RUN R -e "devtools::install_github('tbates/umx')"
