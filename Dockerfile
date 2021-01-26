@@ -2,7 +2,7 @@ FROM rocker/rstudio
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y gnupg2 nano libxml2 libxml2 libv8-dev
+RUN apt-get install -y gnupg2 nano libxml2 libxml2 libv8-dev librsvg2-dev
 
 # Install Intel MKL
 RUN cd /tmp && \
