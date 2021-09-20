@@ -24,6 +24,6 @@ echo "MKL_THREADING_LAYER=GNU" >> /usr/local/lib/R/etc/Renviron && \
 echo "auth-timeout-minutes=0" >> /etc/rstudio/rserver.conf
 
 # Install packages
-RUN R -e "install.packages(c('devtools', 'benchmarkme'))"
-RUN R -e "update.packages(ask = FALSE)"
-RUN R -e "devtools::install_github('tbates/umx')"
+RUN R -e "update.packages(ask = FALSE)" \
+R -e "install.packages(c('devtools', 'benchmarkme', 'umx'))"
+#RUN R -e "devtools::install_github('tbates/umx')"
