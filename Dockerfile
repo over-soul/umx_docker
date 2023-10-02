@@ -5,7 +5,11 @@ RUN apt-get update && apt-get -y upgrade && apt-get clean
 RUN apt-get install -y gnupg2 nano libxml2-dev libv8-dev librsvg2-2 libcairo2-dev libssh2-1-dev libcurl4-openssl-dev libssl-dev
 
 # Install Intel MKL
-RUN sudo apt install intel-mkl
+RUN sudo apt install intel-mkl && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/libopenblas.so libopenblas.so-x86_64-linux-gnu  /opt/intel/mkl/lib/intel64/libmkl_rt.so 150 && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/libopenblas.so.0 libopenblas.so.0-x86_64-linux-gnu  /opt/intel/mkl/lib/intel64/libmkl_rt.so 150 && \
+echo "/opt/intel/lib/intel64"     >>  /etc/ld.so.conf.d/mkl.conf && \
+echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/mkl.conf && \
 
 RUN echo "MKL_INTERFACE_LAYER=GNU,LP64" >> /etc/environment && \
 echo "MKL_THREADING_LAYER=GNU" >> /etc/environment && \
