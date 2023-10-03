@@ -6,19 +6,17 @@ RUN apt-get install -y gnupg2 nano libxml2-dev libv8-dev librsvg2-2 libcairo2-de
 
 # Install Intel MKL
 RUN sudo apt install intel-mkl && \
-
-# update alternatives
-update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so     && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so \
                     libblas.so-x86_64-linux-gnu      /opt/intel/mkl/lib/intel64/libmkl_rt.so 50
-update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so.3   && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so.3 \
                     libblas.so.3-x86_64-linux-gnu    /opt/intel/mkl/lib/intel64/libmkl_rt.so 50
-update-alternatives --install /usr/lib/x86_64-linux-gnu/liblapack.so   && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/liblapack.so \
                     liblapack.so-x86_64-linux-gnu    /opt/intel/mkl/lib/intel64/libmkl_rt.so 50
-update-alternatives --install /usr/lib/x86_64-linux-gnu/liblapack.so.3 && \
-                    liblapack.so.3-x86_64-linux-gnu  /opt/intel/mkl/lib/intel64/libmkl_rt.so 50 && \
+update-alternatives --install /usr/lib/x86_64-linux-gnu/liblapack.so.3 \
+                    liblapack.so.3-x86_64-linux-gnu  /opt/intel/mkl/lib/intel64/libmkl_rt.so 50
                     
 # Next, we have to tell the dyanmic linker about two directories use by the MKL, and have it update its cache:
-echo "/opt/intel/lib/intel64"     >  /etc/ld.so.conf.d/mkl.conf && \
+RUN echo "/opt/intel/lib/intel64"     >  /etc/ld.so.conf.d/mkl.conf && \
 echo "/opt/intel/mkl/lib/intel64" >> /etc/ld.so.conf.d/mkl.conf && \
 ldconfig
 
