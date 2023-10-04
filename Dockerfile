@@ -5,7 +5,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get clean
 RUN apt-get install -y gnupg2 nano libxml2-dev libv8-dev librsvg2-2 libcairo2-dev libssh2-1-dev libcurl4-openssl-dev libssl-dev
 
 # Install Intel MKL
-RUN sudo apt install -y intel-mkl && \
+RUN DEBIAN_FRONTEND=noninteractive apt install -y intel-mkl && \
     update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so \
                         libblas.so-x86_64-linux-gnu      /opt/intel/mkl/lib/intel64/libmkl_rt.so 50 && \
     update-alternatives --install /usr/lib/x86_64-linux-gnu/libblas.so.3 \
